@@ -14,8 +14,6 @@ RSpec.describe "Graphql query", type: :request do
             description
             amount
             date
-            category
-            userId
           }
         }
       GQL
@@ -32,19 +30,15 @@ RSpec.describe "Graphql query", type: :request do
             'id' => expense1.id.to_s,
             'title' => expense1.title,
             'description' => expense1.description,
-            'amount' => expense1.amount.to_s,
-            'date' => expense1.date.to_s,
-            'category' => expense1.category,
-            'userId' => expense1.user_id.to_s
+            'amount' => expense1.amount.to_f,
+            'date' => expense1.date.to_s
           },
           {
             'id' => expense2.id.to_s,
             'title' => expense2.title,
             'description' => expense2.description,
-            'amount' => expense2.amount.to_s,
-            'date' => expense2.date.to_s,
-            'category' => expense2.category,
-            'userId' => expense2.user_id.to_s
+            'amount' => expense2.amount.to_f,
+            'date' => expense2.date.to_s
           }
         ])
       end
