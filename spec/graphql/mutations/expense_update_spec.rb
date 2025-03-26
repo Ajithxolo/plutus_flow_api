@@ -46,5 +46,24 @@ RSpec.describe 'ExpenseUpdate Mutation', type: :request do
         )
       end
     end
+
+    context 'when the mutation params is invalid' do
+      it 'returns errors messages' do
+        invalid_params = {
+          id: expense.id,
+          title: "",
+          description: "Pizza",
+          amount: 20.50,
+          date: "2025-03-26"
+        }
+
+        post '/graphql', params: { query: mutation, variables: invalid_params }
+
+        json = JSON.parse(response.body)
+        errors = json['errors']
+
+        expect(errors).not_to be_empty
+      end
+    end
   end
 end
