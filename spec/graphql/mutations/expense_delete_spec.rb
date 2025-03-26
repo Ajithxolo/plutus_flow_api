@@ -7,7 +7,7 @@ RSpec.describe 'ExpenseDelete Mutation', type: :request do
     let(:mutation) do
       <<~GQL
         mutation($id: ID!) {
-          expenseDelete(id: $id) {
+          expenseDelete(input: {id: $id}) {
             message
             errors
           }
@@ -23,7 +23,7 @@ RSpec.describe 'ExpenseDelete Mutation', type: :request do
 
     context 'when the mutation is successful' do
       it 'deletes an expense and returns a success message' do
-        post '/graphql', params: { query: mutation, variables: params.to_json }, headers: { 'Content-Type': 'application/json' }
+        post '/graphql', params: { query: mutation, variables: params.to_json }
 
         json = JSON.parse(response.body)
         data = json['data']['expenseDelete']
