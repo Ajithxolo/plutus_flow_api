@@ -34,5 +34,19 @@ RSpec.describe 'ExpenseDelete Mutation', type: :request do
         )
       end
     end
+    context 'when the mutation params are invalid' do
+      it 'returns error messages' do
+        invalid_params =   {
+          id: 0
+        }
+
+        post '/graphql', params: { query: mutation, variables: invalid_params.to_json }
+
+        json = JSON.parse(response.body)
+        errors = json['data']['expenseDelete']['errors']
+
+        expect(errors).to include("Couldn't find Expense with 'id'=0")
+      end
+    end
   end
 end
