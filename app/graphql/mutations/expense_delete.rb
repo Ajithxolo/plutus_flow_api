@@ -4,7 +4,7 @@ module Mutations
   class ExpenseDelete < BaseMutation
     argument :id, ID, required: true
 
-    field :message, String, null: false
+    field :message, String, null: true
     field :errors, [String], null: false
 
     def resolve(id:)
