@@ -74,5 +74,23 @@ RSpec.describe Mutations::CreateUserWithSupabase, type: :request do
         expect(data['errors']).to include("Invalid token: Not enough or too many segments")
       end
     end
+
+    context 'when the user cannot be saved' do
+      before do
+        allow(User).to receive(:find_or_initialize_by).and_return(User.new)
+        allow_any_instance_of(User).to receive(:save).and_return(false)
+        allow_any_instance_of(User).to receive_message_chain(:errors, :full_messages).and_return(["Email can't be blank"])
+      end
+
+      it 'returns validation errors' do
+        post '/graphql', params: { query: mutation, variables: { token: valid_token } }
+
+        json = JSON.parse(response.body)
+        data = json['data']['createUserWithSupabase']
+
+        expect(data['user']).to be_nil
+        expect(data['errors']).to include("Email can't be blank")
+      end
+    end
   end
 end
