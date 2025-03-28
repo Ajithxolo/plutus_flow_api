@@ -55,5 +55,24 @@ RSpec.describe Mutations::CreateUserWithSupabase, type: :request do
         expect(user.supabase_metadata).to eq({ "email" => "test@example.com" })
       end
     end
+
+    let(:invalid_token) { "invalid_token" }
+    let(:invalid_params) do
+      {
+        token: invalid_token
+     }
+    end
+
+    context 'when the token is invalid' do
+      it 'returns an error message' do
+        post '/graphql', params: { query: mutation, variables: invalid_params.to_json }
+
+        json = JSON.parse(response.body)
+        data = json['data']['createUserWithSupabase']
+
+        expect(data['user']).to be_nil
+        expect(data['errors']).to include("Invalid token: Not enough or too many segments")
+      end
+    end
   end
 end
