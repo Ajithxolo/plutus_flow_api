@@ -2,8 +2,9 @@ require 'rails_helper'
 
 RSpec.describe "Graphql query", type: :request do
   describe 'expenses query' do
+    let!(:user_bob) { create(:user, email: 'bob@example.com', supabase_id: 'tg0f8637-a893-4a54-a790-296348ccccba') }
     let!(:expense1) { create(:expense) }
-    let!(:expense2) { create(:expense) }
+    let!(:expense2) { create(:expense, user: user_bob) }
 
     let(:query) do
       <<~GQL

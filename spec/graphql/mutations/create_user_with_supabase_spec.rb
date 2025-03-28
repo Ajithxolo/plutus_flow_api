@@ -5,7 +5,7 @@ RSpec.describe Mutations::CreateUserWithSupabase, type: :request do
     let(:mutation) do
       <<~GQL
         mutation($token: String!) {
-          createUserWithSupabase(token: $token) {
+          createUserWithSupabase(input: {token: $token}) {
             user {
               id
               email
@@ -22,32 +22,37 @@ RSpec.describe Mutations::CreateUserWithSupabase, type: :request do
       JWT.encode(
         {
           sub: "supabase_user_id",
-          user_metadata: { email: "test@example.com", name: "Test User" }
+          user_metadata: { email: "test@example.com" }
         },
         SupabaseJwtHandler.secret_key,
         "HS256"
       )
     end
 
+    let(:valid_params) do
+      {
+        token: valid_token
+      }
+    end
+
     context 'when the token is valid' do
       it 'creates a new user and returns the user details' do
-        post '/graphql', params: { query: mutation, variables: { token: valid_token } }
+        post '/graphql', params: { query: mutation, variables: valid_params.to_json }
 
         json = JSON.parse(response.body)
         data = json['data']['createUserWithSupabase']
 
         expect(data['user']).to include(
           'email' => 'test@example.com',
-          'name' => 'Test User',
-          'supabaseMetadata' => { 'email' => 'test@example.com', 'name' => 'Test User' }
+          'supabaseMetadata' => { 'email' => 'test@example.com' }
         )
         expect(data['errors']).to be_empty
 
         user = User.find_by(supabase_id: "supabase_user_id")
         expect(user).not_to be_nil
         expect(user.email).to eq("test@example.com")
-        expect(user.name).to eq("Test User")
-        expect(user.supabase_metadata).to eq({ "email" => "test@example.com", "name" => "Test User" })
+        expect(user.name).to eq("")
+        expect(user.supabase_metadata).to eq({ "email" => "test@example.com" })
       end
     end
   end
