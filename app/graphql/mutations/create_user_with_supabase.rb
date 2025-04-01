@@ -3,7 +3,7 @@ module Mutations
     argument :token, String, required: true
 
     field :user, Types::UserType, null: true
-    field :errors, [String], null: false
+    field :errors, [ String ], null: false
 
     def resolve(jwt)
       raise GraphQL::ExecutionError, "Token must be a valid string" unless jwt[:token].is_a?(String)
@@ -17,7 +17,7 @@ module Mutations
 
         user = User.find_or_initialize_by(supabase_id: subject)
         user.email = metadata_email
-        user.name = ''
+        user.name = ""
         user.supabase_metadata = metadata
 
         if user.save
@@ -34,12 +34,12 @@ module Mutations
       rescue JWT::DecodeError => e
         {
           user: nil,
-          errors: ["Invalid token: #{e.message}"]
+          errors: [ "Invalid token: #{e.message}" ]
         }
       rescue StandardError => e
         {
           user: nil,
-          errors: ["An error occurred: #{e.message}"]
+          errors: [ "An error occurred: #{e.message}" ]
         }
       end
     end

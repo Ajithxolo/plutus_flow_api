@@ -8,7 +8,7 @@ class SupabaseJwtHandler
   end
 
   def self.decode_token!(token)
-    decoded_token_payload = JWT.decode(token, secret_key, true, {algorithm: "HS256"})
+    decoded_token_payload = JWT.decode(token, secret_key, true, { algorithm: "HS256" })
     DecodedTokenPayload.new(decoded_token_payload)
   end
 

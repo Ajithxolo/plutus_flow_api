@@ -9,12 +9,11 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     # Replace '*' with your frontend URL in production for better security
-    origins '*'
-    
-    resource '/graphql',
+    origins "*"
+
+    resource "/graphql",
       headers: :any,
-      methods: [:get, :post, :options],
-      expose: ['Authorization']
+      methods: [ :get, :post, :options ],
+      expose: [ "Authorization" ]
   end
 end
-  

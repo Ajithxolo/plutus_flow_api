@@ -54,4 +54,4 @@ group :development, :test do
   gem "graphiql-rails"
 end
 gem "graphql"
-gem 'jwt'
+gem "jwt"

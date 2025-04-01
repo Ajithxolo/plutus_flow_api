@@ -5,7 +5,7 @@ module Mutations
     argument :id, ID, required: true
 
     field :message, String, null: true
-    field :errors, [String], null: false
+    field :errors, [ String ], null: false
 
     def resolve(id:)
       expense = Expense.find_by(id: id)
@@ -17,7 +17,7 @@ module Mutations
       else
         {
           message: nil,
-          errors: ["Couldn't find Expense with 'id'=#{id}"]
+          errors: [ "Couldn't find Expense with 'id'=#{id}" ]
         }
       end
     end
