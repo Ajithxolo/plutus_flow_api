@@ -71,7 +71,7 @@ jobs:
       - name: Prepare DB and Run tests
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:password@localhost:5432/myapp_test?pool=5
+          DATABASE_URL: postgres://postgres:password@localhost:5432/plutus_flow_api_test?pool=5
         run: |
-          bin/rails db:create db:schema:load
-          bin/rails rspec
+          RAILS_ENV=test bin/rails db:create db:schema:load
+          RAILS_ENV=test bin/rspec
