@@ -20,11 +20,11 @@ class SupabaseJwtHandler
     end
 
     def subject
-      payload.first.dig("sub")
+      payload.dig("sub")
     end
 
     def metadata
-      payload.first.dig("user_metadata")
+      payload.dig("user_metadata")
     end
 
     def metadata_email

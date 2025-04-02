@@ -55,3 +55,4 @@ group :development, :test do
 end
 gem "graphql"
 gem "jwt"
+gem 'dotenv'
