@@ -3,8 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   scan_ruby:
@@ -25,7 +24,6 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -44,14 +42,18 @@ jobs:
 
     services:
       postgres:
-        image: postgres:latest
+        image: postgres:12
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: postgres
+          POSTGRES_DB: plutus_flow_api_test
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U postgres"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Install packages
@@ -66,18 +68,10 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Wait for PostgreSQL to be ready
-        run: until pg_isready -h localhost -p 5432; do sleep 1; done
-
-      - name: Set up database
+      - name: Prepare DB and Run tests
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://postgres@localhost:5432/postgres
+          DATABASE_URL: postgres://postgres:password@localhost:5432/myapp_test?pool=5
         run: |
-          bin/rails db:create
-          bin/rails db:schema:load
-
-      - name: Run tests
-        env:
-          RAILS_ENV: test
-        run: bin/rspec
+          bin/rails db:create db:schema:load
+          bin/rails test
