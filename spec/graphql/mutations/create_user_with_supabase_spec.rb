@@ -86,7 +86,7 @@ RSpec.describe Mutations::CreateUserWithSupabase, type: :request do
       before do
         allow(User).to receive(:find_or_initialize_by).and_return(User.new)
         allow_any_instance_of(User).to receive(:save).and_return(false)
-        allow_any_instance_of(User).to receive_message_chain(:errors, :full_messages).and_return(["Email can't be blank"])
+        allow_any_instance_of(User).to receive_message_chain(:errors, :full_messages).and_return([ "Email can't be blank" ])
       end
 
       it 'returns validation errors' do
