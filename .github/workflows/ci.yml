@@ -74,4 +74,4 @@ jobs:
           DATABASE_URL: postgres://postgres:password@localhost:5432/myapp_test?pool=5
         run: |
           bin/rails db:create db:schema:load
-          bin/rails test
+          bin/rails rspec
